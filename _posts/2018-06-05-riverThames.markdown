@@ -9,7 +9,7 @@ author: Yuan
 ---
 
 
-![St.Paul Church](https://github.com/mikezhang95/mikezhang95.github.io/tree/master/assets/img/post-2/IMG_8673.jpg)
+![St.Paul Church](https://github.com/mikezhang95/mikezhang95.github.io/raw/master/assets/img/post-2/IMG_8673.jpg)
 
 
 
