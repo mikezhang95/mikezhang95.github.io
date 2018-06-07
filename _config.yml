@@ -10,28 +10,29 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Author settings
 author: Yuan Zhang
-author-pic: adam-face.jpg
-about-author: My name is Yuan Zhang. I’m student.
+author-pic: face.jpg
+about-author: My name is Yuan Zhang. I am currently enrolled in MSc Machine Learning at University College London. Prior to that, I obtained a BSc Engineering degree at Tsinghua University, China.
+
 
 # Contact links
 email: mike.zy7@gmail.com
-phone: # Add your Phone number
-website: # Add your website, do not add http://
-linkedin: # Add your Linkedin handle
-github: mikezhang95 # Add your Github handle
-twitter: '@artemsheludko_' # Add your Twitter handle
-facebook: # Add your Facebook handle
+phone: +8615210325091
+website: https://mikezhang95.github.io
+linkedin:
+github: mikezhang95
+facebook: https://www.facebook.com/mike.beckham.794 # Add your Facebook handle
+twitter: # Add your Twitter handle
 instagram: # Add your Instagram handle
 pinterest: # Add your Pinterest handle
 
 # Newsletter
-mailchimp: # Add your MailChimp form identifier.
+#mailchimp: # Add your MailChimp form identifier.
 
 # Disqus
-discus_identifier: mr-brown # Add your discus identifier
+#discus_identifier: mr-brown # Add your discus identifier
 
 # Tracker
-analytics: # Google Analytics
+analytics: UA-120513439-1 # Google Analytics
 
 # Paginate
 paginate: 6
