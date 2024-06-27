@@ -74,7 +74,7 @@ github_username: mikezhang95 # your GitHub user name
 gitlab_username: # your GitLab user name
 twitter_username: # your Twitter handle
 mastodon_username: # your mastodon instance+username in the format instance.tld/@username
-linkedin_username: # your LinkedIn user name
+linkedin_username: https://www.linkedin.com/in/yuan-zhang-582647162 # your LinkedIn user name
 telegram_username: # your Telegram user name
 scholar_userid: https://scholar.google.com/citations?user=gMzGCV0AAAAJ&hl=en # your Google Scholar ID
 semanticscholar_id: # your Semantic Scholar ID
@@ -111,14 +111,12 @@ discord_id: # your discord id (18-digit unique numerical identifier)
 
 google_analytics:  # your Google Analytics measurement ID (format: G-XXXXXXXXXX)
 panelbear_analytics:  # panelbear analytics site ID (format: XXXXXXXXX)
-
 google_site_verification:  # your google-site-verification ID (Google Search Console)
 bing_site_verification:  # out your bing-site-verification ID (Bing Webmaster)
 
 # -----------------------------------------------------------------------------
 # Blog
 # -----------------------------------------------------------------------------
-
 blog_name: Yuan's Personal Blog # blog_name will be displayed in your blog page
 blog_nav_title: blog # your blog must have a title for it to be displayed in the nav bar
 blog_description: a space for knowledge
@@ -259,8 +257,8 @@ display_tags: ['formatting', 'images', 'links', 'math', 'code'] # this tags will
 
 scholar:
 
-  last_name: [Einstein]
-  first_name: [Albert, A.]
+  last_name: [Zhang]
+  first_name: [Yuan]
 
   style: apa
   locale: en
