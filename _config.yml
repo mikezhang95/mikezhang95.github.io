@@ -127,7 +127,7 @@ pagination:
   enabled: false 
 
 related_blog_posts:
-  enabled: false
+  enabled: true 
   max_related: 5
 
 # Giscus comments (RECOMMENDED)
