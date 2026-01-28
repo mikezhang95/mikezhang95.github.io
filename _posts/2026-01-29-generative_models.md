@@ -7,11 +7,8 @@ img:
 tags: [Blog]
 author: Yuan Zhang
 giscus_comments: true
+math: true
 ---
-
-
-
-> Date: 2026-01-29 | Estimated Reading Time: 30 min | Author: Yuan Zhang
 
 Generative modeling is a core building block across modern machine learning, from image synthesis to trajectory generation and world modeling. This post reviews two dominant paradigms: Generative Adversarial Networks (GANs) and Diffusion Models.
 

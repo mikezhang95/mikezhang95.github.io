@@ -3,21 +3,15 @@ layout: post
 title: Model-based Reinforcement Learning
 date: 2026-01-28
 description: 
-img: 
-tags: [Blog]
+tags: [Blog, RL]
 author: Yuan Zhang
 giscus_comments: true
+math: true
 ---
-
-
-
-> Date: 2026-01-28 | Estimated Reading Time: 30 min | Author: Yuan Zhang
 
 Model-Based Reinforcement Learning (MBRL) aims to improve sample efficiency by explicitly learning a model of the environment dynamics and using it for planning, policy optimization, or both. Compared to model-free RL, MBRL introduces inductive bias and structure, at the cost of model bias and potential instability.
 
 This post surveys modern MBRL methods with an emphasis on *practical algorithmic designs* and *optimization choices* that make them work in real systems.
-
-[TOC]
 
 ---
 

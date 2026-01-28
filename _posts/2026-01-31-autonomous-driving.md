@@ -7,6 +7,7 @@ img:
 tags: [Blog]
 author: Yuan Zhang
 giscus_comments: true
+math: true
 ---
 
 
