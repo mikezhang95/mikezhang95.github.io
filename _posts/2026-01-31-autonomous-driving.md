@@ -1,4 +1,15 @@
-# Autonomous Driving: MultiPath++, Kalman Filters, and iLQR
+---
+layout: post
+title: Autonomous Driving Algorithms
+date: 2026-01-31
+description: 
+img: 
+tags: [Blog]
+author: Yuan Zhang
+giscus_comments: true
+---
+
+
 
 > Date: 2026-01-31 | Estimated Reading Time: 30 min | Author: Yuan Zhang
 

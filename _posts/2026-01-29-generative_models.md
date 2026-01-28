@@ -1,4 +1,15 @@
-# Generative Models: From GANs to Diffusion Models
+---
+layout: post
+title: Generative Models
+date: 2026-01-29
+description: 
+img: 
+tags: [Blog]
+author: Yuan Zhang
+giscus_comments: true
+---
+
+
 
 > Date: 2026-01-29 | Estimated Reading Time: 30 min | Author: Yuan Zhang
 

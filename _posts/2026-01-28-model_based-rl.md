@@ -1,4 +1,15 @@
-# Model-Based Reinforcement Learning
+---
+layout: post
+title: Model-based Reinforcement Learning
+date: 2026-01-28
+description: 
+img: 
+tags: [Blog]
+author: Yuan Zhang
+giscus_comments: true
+---
+
+
 
 > Date: 2026-01-28 | Estimated Reading Time: 30 min | Author: Yuan Zhang
 
