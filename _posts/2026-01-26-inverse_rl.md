@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Inverse Reinforcement Learning
-date: 2026-01-30
+date: 2026-01-26
 description: 
 img: 
 tags: [Blog]

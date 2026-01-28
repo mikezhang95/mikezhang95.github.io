@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Generative Models
-date: 2026-01-29
+date: 2026-01-27
 description: 
 img: 
 tags: [Blog]
