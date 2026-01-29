@@ -28,4 +28,19 @@
 
     <script src="{{ '/assets/js/theme.js' | relative_url }}"></script>
     <script src="{{ '/assets/js/dark_mode.js' | relative_url }}"></script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            // 指定行内公式的识别符
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            // 避免被当做 HTML 标签处理
+            processEscapes: true
+        }
+    });
+    </script>
+    <!-- 从 CDN 加载 MathJax 库 -->
+    <script type="text/javascript"
+            async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
     {% endif %}

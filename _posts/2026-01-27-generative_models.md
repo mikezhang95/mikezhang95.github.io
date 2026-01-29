@@ -22,7 +22,7 @@ Given data $x \sim p_\text{data}(x) $, a generative model learns an approximatio
 - Samples resemble real data
 - The model covers the full data distribution.
 
-<img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png" alt="generative-overview" style="zoom:80%;" />
+<img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png" alt="generative-overview" style="zoom: 67%;" />
 
 ---
 
