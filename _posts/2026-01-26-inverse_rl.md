@@ -16,6 +16,8 @@ math: true
 
 Imitation Learning (IL) and Inverse Reinforcement Learning (IRL) address the problem of learning behavior from expert demonstrations, especially when defining an explicit reward function is difficult.
 
+[Papers: HLFH, GAIL]
+
 ---
 
 ## 1. Problem Setup

@@ -9,9 +9,9 @@ giscus_comments: true
 math: true
 ---
 
-Model-Based Reinforcement Learning (MBRL) aims to improve sample efficiency by explicitly learning a model of the environment dynamics and using it for planning, policy optimization, or both. Compared to model-free RL, MBRL introduces inductive bias and structure, at the cost of model bias and potential instability.
+Model-based reinforcement learning (MBRL) aims to improve sample efficiency by explicitly learning a model of the environment dynamics and using it for planning, policy optimization, or both. Compared to model-free RL, MBRL introduces inductive bias and structure, at the cost of model bias and potential instability. This post surveys modern MBRL methods with an emphasis on *practical algorithmic designs* and *optimization choices* that make them work in real systems.
 
-This post surveys modern MBRL methods with an emphasis on *practical algorithmic designs* and *optimization choices* that make them work in real systems.
+[Papers: World Models, Muzero, EfficientZero, PETS, MBPO, TDMPC, Dreamer]
 
 ---
 
@@ -37,10 +37,7 @@ Challenges:
 
 ### 2.1 Planning with Learned Models
 
-Learn a dynamics model:
-\[
-s_{t+1} = f_\theta(s_t, a_t)
-\]
+Given Learn a dynamics model: $s_{t+1} = f_\theta(s_t, a_t)$
 
 Then use **online planning** (e.g., Model Predictive Control) to select actions:
 - Shooting methods

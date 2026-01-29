@@ -14,7 +14,9 @@ math: true
 
 > Date: 2026-01-31 | Estimated Reading Time: 30 min | Author: Yuan Zhang
 
-Autonomous driving systems combine learning-based prediction with classical estimation and optimization. This post surveys key components commonly found in modern driving stacks.
+Autonomous driving systems combine learning-based prediction with classical estimation and optimization. This post surveys key components commonly found in modern driving stacks. 
+
+[Multipath++, 3DGS, Kalman filter, iLQR]
 
 ---
 
