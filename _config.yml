@@ -182,6 +182,10 @@ news_limit: 5 # leave blank to include all the news in the `_news` folder
 markdown: kramdown
 highlighter: rouge
 kramdown:
+  # 最关键的一行：告诉Kramdown将数学公式区块自动放入 {% raw %} 中
+  parse_block_html: true
+  # 可选但推荐：防止其他意外转义
+  enable_coderay: false
   input: GFM
   syntax_highlighter_opts:
     css_class: 'highlight'
