@@ -20,13 +20,13 @@ This post reviews two dominant paradigms: generative adversarial networks (GANs)
 
 Given data $x \sim p_\text{data}(x) $, a generative model learns an approximation $p_\theta(x) $ such that: 
 - Samples resemble real data
-- The model covers the full data distribution
+- The model covers the full data distribution.
 
-Evaluation is often qualitative and task-dependent.
+<img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png" alt="generative-overview" style="zoom:80%;" />
 
 ---
 
-## 2. Variational Auto-Encoder
+## 2. Variational Auto-Encoder (VAE)
 
 ---
 
@@ -128,36 +128,90 @@ reward/state does not depend on action.
 
 ## 4. Diffusion Models
 
-### 4.1 Forward Process
+### 4.1 Forward Diffusion Process: From Data to Noise
 
-Gradually add noise:
-\[
-x_t = \sqrt{\alpha_t} x_0 + \sqrt{1 - \alpha_t} \epsilon
-\]
+Given a data point sampled from a real data distribution $x_0 \sim p_r(x)$, a forward diffusion process, we can gradually add small amount of Gaussian noise in $T$ steps, producing a sequence os noisy samples $x_1,\dots,x_T$. The step sizes are controlled by a variance schedule ${\beta_t \in (0,1)}_{t=1}^T$:
+$$
+q(x_t|x_{t-1}) = \mathcal{N}(x_t;\sqrt{1-\beta_t}x_{t-1}, \beta_t\mathbf{I}), q(x_{0:T}|x_0) = \prod_{t=1}^T q(x_t|x_{t-1}).
+$$
+When $T\to \infty$, $x_T$  is equivalent to an isotropic Gaussian distribution. 
+
+#### Reparametrization tricks: from $x_0$ to $x_t$ 
+
+$$
+x_t = \sqrt{1-\beta_t}x_{t-1} + \sqrt{\beta_t} \epsilon_{t-1} \quad\text{;where $\epsilon_{t-1} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$} \\
+=  \sqrt{(1-\beta_t)(1-\beta_{t-1})}x_{t-2} + \sqrt{1-(1-\beta_t)(1-\beta_{t-1})} \bar{\epsilon}_{t-2} \quad\text{;where $\bar{\epsilon}_{t-2}$ merges two Gaussians} \\
+= \dots \\
+= \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1-\bar{\alpha}_t} \epsilon \quad\text{;where $\epsilon \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$}\\
+q(x_t|x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1-\bar{\alpha}_t)\mathbf{I})
+$$
+
+#### TODO: Connections with stochasitic gradient Langevin dynamics
+
+$$
+x_t = x_{t-1} + \delta/2 \nabla_x \log p(x_{t-1}) + \sqrt{\delta}\epsilon_t, \quad\text{where $\epsilon_{t-1} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$}.
+$$
 
 ---
 
-### 4.2 Reverse Process
+### 4.2 Reverse Diffusion Process: From Noise to Data
 
-Learn a denoiser:
-\[
-\epsilon_\theta(x_t, t)
-\]
+If we can reverse the above process and sample from $p_{\theta}(x_{t-1}|x_t)$, we will be able to recreate the true sample from a Gaussian noise input, $x_T \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$:
+$$
+p_{\theta}(x_{t-1}|x_t) = \mathcal{N}(x_{t-1};\mu_{\theta}(x_t, t), \Sigma_\theta(x_t, t)), p_\theta(x_{0:T}) = p(x_T) \prod_{t=1}^T p_\theta(x_{t-1}|x_t).
+$$
 
-Training reduces to a simple MSE loss between true and predicted noise.
+#### Distribution Representation 1: from $x_t, x_0$ to $x_{t-1}$ 
 
----
+It is noteworthy that the reverse conditional probability is tractable when conditioned on real sample $x_0$ :
+$$
+q(x_{t-1}|x_t, x_0) = \mathcal{N}(x_{t-1};\tilde{\mu}(x_t, x_0), \tilde{\beta}_t\mathbf{I}),
+$$
+where 
+$$
+\tilde{\mu}(x_t, x_0) = \frac{\sqrt{1-\beta_t}( 1- \bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}  x_t + \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1-\bar{\alpha}_t} x_0 \\
+\tilde{\beta}_t = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \beta_t.
+$$
 
-### 4.3 Advantages
+#### Distribution Representation 2: from $x_t$ to $x_{t-1}$ 
 
-- Stable training
-- Strong mode coverage
-- Excellent sample diversity
+From the reparametrization tricks above, we can replace $x_0$ with $x_t$:  
+$$
+\tilde{\mu}(x_t) = \frac{\sqrt{1-\beta_t}( 1- \bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}  x_t + \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1-\bar{\alpha}_t}\frac{1}{\sqrt{\bar{\alpha}_t}} (x_t -  \sqrt{1-\bar{\alpha}_t} \epsilon \\
+ = \frac{1}{\sqrt{1-\beta_t}} (x_t  - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}}\epsilon) \quad\text{;where $\bar{\alpha}_{t} = \bar{\alpha}_{t-1}(1-\beta_t)$}
+$$
+The above derivations can be achieved by Bayesian rule, see this [blog](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/) for details. We want to use a parametrized function $\mu_{\theta}(x_t, t)$ to represent $\tilde{\mu}(x_t)$. Since $x_t$ is known during training, we only need to learn to predict noises $\epsilon$ with $\epsilon_\theta(x_t, t)$.
 
-### 4.4 Drawbacks
+### 4.3 Training and Sampling Process
 
-- Slow sampling (iterative)
-- High compute cost
+TODO: dervie DDPM loss:
+$$
+L_\text{DDPM} = \mathbb{E}_{x_0, t \sim [1, T], \epsilon}[\|\epsilon - \epsilon_\theta(x_t, t)\|^2 ] \\
+					= \mathbb{E}_{x_0, t \sim [1, T], \epsilon}[\|\epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\epsilon, t)\|^2 ] \\
+$$
+<img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/DDPM-algo.png" alt="DDPM-algo" style="zoom: 33%;" />
+
+
+
+## 5. TODO: Flow-Matching Models
+
+If we make the diffusion step $\Delta t \to 0$ and forward process from $x_0 \to x_1$ this becomes a continuous-time diffusion process.
+
+#### Connections with stochasitic diffential equation (SDE)
+
+The same as a stochasitc differential equation (SDE): 
+$$
+dx = f(x,t)dt + g(t)dw
+$$
+It has a corresponding ordinary differential equation (ODE) inducing the same $p_t(x)$:
+$$
+\frac{dx}{dt} = f(x,t) - \frac{1}{2}g(t)^2 \nabla_x \log p_t(x)
+$$
+Discretization this leads to “Denoising Diffusion Implicit Models” (DDIM) 
+
+Flow matching (FM)
+
+This is the continuous version of Langevin dynamics function
 
 ---
 
@@ -167,9 +221,13 @@ Training reduces to a simple MSE loss between true and predicted noise.
 
 [2] Martin Arjovsky, Soumith Chintala, and Léon Bottou. [“Wasserstein GAN.”](https://arxiv.org/pdf/1701.07875.pdf) ICML, 2017. 
 
-[3] David Pfau, Oriol Vinyals. [“Connecting Generative Adversarial Networks and Actor-Critic Methods.”]() arXiv, 2016
+[3] David Pfau, Oriol Vinyals. [“Connecting Generative Adversarial Networks and Actor-Critic Methods.”]() arXiv, 2016.
 
- 
+[4] Calvin Luo. [“Understanding Diffusion Models: A Unified Perspective.”](https://arxiv.org/pdf/2208.11970) arXiv, 2022.
+
+
+
+
 
 
 
