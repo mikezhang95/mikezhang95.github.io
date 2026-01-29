@@ -22,7 +22,7 @@ Given data $x \sim p_\text{data}(x) $, a generative model learns an approximatio
 - Samples resemble real data
 - The model covers the full data distribution.
 
-<img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png" alt="generative-overview" style="zoom: 67%;" />
+<img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png" alt="generative-overview" style="zoom: 50%;" />
 
 ---
 
@@ -50,16 +50,16 @@ $$
 
 ### 3.2 What is the optimal value for $D$? 
 
-Examinte the best value for $D$ by calulating the stationary point: 
+Examinte the best value for $D$ by calulating the stationary point:    
 $$
 D^*(x) = \frac{p_r(x)}{p_r(x) + p_g(x)}.
 $$
 
 ### 3.3 What does the loss function represent? 
 
-Given the optimal discriminator $D^*$, find the relations between real and synthetic data distributions $p_r$ and $p_g$ 
+Given the optimal discriminator $D^*$, find the relations between real and synthetic data distributions $p_r$ and $p_g$:  
 $$
-L(G, D^*) = \mathbb{E}_{x \sim p_r}[\log \frac{p_r(x)}{p_r(x)+p_g(x)}] + \mathbb{E}_{x \sim p_g}[\log \frac{p_g(x)}{p_r(x)+p_g(x)}]  \\ 
+L(G, D^*) = \mathbb{E}_{x \sim p_r}[\log \frac{p_r(x)}{p_r(x)+p_g(x)}] + \mathbb{E}_{x \sim p_g}[\log \frac{p_g(x)}{p_r(x)+p_g(x)}]  \\
 				= D_{KL}(p_r\|\frac{p_r+p_g}{2}) - \log2 + D_{KL}(p_g\|\frac{p_r+p_g}{2}) - \log2   \\
 				= 2D_{JS}(p_r \| p_g) - \log4.
 $$
@@ -75,11 +75,11 @@ $$
 
 ### 3.5 Wasserstein GAN (WGAN) [2]
 
-[Wasserstein Distance](https://en.wikipedia.org/wiki/Wasserstein_metric) is a measure of the distance between two probability distributions, which can be interpreted as the minimum energy cost of moving and transforming a pile of dirt in the shape of one probability distribution to the shape of the other distribution. When dealing with the continuous probability domain, the distance formula becomes: 
+[Wasserstein Distance](https://en.wikipedia.org/wiki/Wasserstein_metric) is a measure of the distance between two probability distributions, which can be interpreted as the minimum energy cost of moving and transforming a pile of dirt in the shape of one probability distribution to the shape of the other distribution. When dealing with the continuous probability domain, the distance formula becomes:      
 $$
-W(p_r, p_g) = \inf_{\gamma \sim \Pi(p_r, p_g)} \mathbb{E}_{(x_1,x_2) \sim \gamma}[ \|x_1 - x_2\| ],
+W(p_r, p_g) = \inf_{\gamma \sim \Pi(p_r, p_g)} \mathbb{E}_{(x_1,x_2) \sim \gamma}[ \|x_1 - x_2\| ], \\\\
 $$
-where $\tau(x_1,x_2)$ states the joint distribution that satisfies the boundary conditions of $\int_{x_2} \gamma(x_1,x_2)dx_2 = p_r(x_1)$ and $\int_{x_1} \gamma(x_1,x_2)dx_1 = p_g(x_2)$. 
+where $\tau(x_1,x_2)$ states the joint distribution that satisfies the boundary conditions of $\int_{x_2} \gamma(x_1,x_2)dx_2 = p_r(x_1)$ and $\int_{x_1} \gamma(x_1,x_2)dx_1 = p_g(x_2)$.     
 
 #### TODO: Why Wasserstein is better than JS or KL divergence?
 
