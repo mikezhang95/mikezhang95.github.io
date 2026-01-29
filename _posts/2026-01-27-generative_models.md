@@ -69,7 +69,7 @@ $$
 
 Given the optimal discriminator $$D^*$$, find the relations between real and synthetic data distributions $$p_r$$ and $$p_g$$: 
 
- 
+
 $$
 \begin{aligned}
 L(G, D^*) = \mathbb{E}_{x \sim p_r}[\log \frac{p_r(x)}{p_r(x)+p_g(x)}] + \mathbb{E}_{x \sim p_g}[\log \frac{p_g(x)}{p_r(x)+p_g(x)}]  \\
@@ -143,6 +143,8 @@ $$
 | **Inner Model (y)**     | Generator ($$G$$)                         | Actor (Policy $$\pi$$)                                       |
 | **Inner Objective (f)** | $$-\mathbb{E}_{z\sim p_z}[\log D(G(z))]$$ | $$-\mathbb{E}_{s \sim \mu,a\sim\pi}[Q(s, a)]$$               |
 
+​          
+
 #### GANs as a kind of Actor-Critic
 
 For an RL environment with: 
@@ -162,7 +164,7 @@ reward/state does not depend on action.
 
 Given a data point sampled from a real data distribution $$x_0 \sim p_r(x)$$, a forward diffusion process, we can gradually add small amount of Gaussian noise in $$T$$ steps, producing a sequence os noisy samples $$x_1,\dots,x_T$$. The step sizes are controlled by a variance schedule $${\beta_t \in (0,1)}_{t=1}^T$$:
 
- 
+
 $$
 q(x_t|x_{t-1}) = \mathcal{N}(x_t;\sqrt{1-\beta_t}x_{t-1}, \beta_t\mathbf{I}), q(x_{0:T}|x_0) = \prod_{t=1}^T q(x_t|x_{t-1}).
 $$
@@ -211,13 +213,8 @@ It is noteworthy that the reverse conditional probability is tractable when cond
 
 
 $$
-q(x_{t-1}|x_t, x_0) = \mathcal{N}(x_{t-1};\tilde{\mu}(x_t, x_0), \tilde{\beta}_t\mathbf{I}),
-$$
-
-
-where 
-$$
 \begin{aligned}
+q(x_{t-1}|x_t, x_0) = \mathcal{N}(x_{t-1};\tilde{\mu}(x_t, x_0), \tilde{\beta}_t\mathbf{I}), \\
 \tilde{\mu}(x_t, x_0) = \frac{\sqrt{1-\beta_t}( 1- \bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}  x_t + \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1-\bar{\alpha}_t} x_0 \\
 \tilde{\beta}_t = \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \beta_t. 
 \end{aligned}
