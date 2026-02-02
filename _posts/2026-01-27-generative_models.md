@@ -19,14 +19,14 @@ This post reviews two dominant paradigms: generative adversarial networks (GANs)
 ## 1. What Is a Generative Model?
 
 Given data $$x \sim p_\text{data}(x) $$, a generative model learns an approximation $$p_\theta(x)$$ such that: 
-- Samples resemble real data
-- The model covers the full data distribution.
+- generates samples that resemble real data
+- covers the full data distribution.
 
 <img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png" alt="generative-overview" style="zoom: 50%;" />
 
 ---
 
-## 2. Variational Auto-Encoder (VAE)
+## 2. TODO: Variational Auto-Encoder (VAE)
 
 ---
 
@@ -108,7 +108,7 @@ It is intractable to exhaust all the possible joint distributions in $$\Pi(p_r, 
 
 
 $$
-W(p_r, p_g) = \frac{1}{K} \sup_{\|f\| \le K} \mathbb{E}_{x\sim p_r}[f(x)] - \mathbb{E}_{x \sim p_g} [f(x)],
+D_W(p_r, p_g) = \frac{1}{K} \sup_{\|f\| \le K} \mathbb{E}_{x\sim p_r}[f(x)] - \mathbb{E}_{x \sim p_g} [f(x)],
 $$
 
 
@@ -116,11 +116,11 @@ where the real-valued function $$f: \mathbb{R} \to \mathbb{R}$$ should be K-Lips
 
 
 $$
-L(p_r,p_g) = W(p_r, p_g) = \max_{w \in W} \mathbb{E}_{x\sim p_r}[f_w(x)] - \mathbb{E}_{x \sim p_g} [f_w(x)].
+L(p_r,p_g) = D_W(p_r, p_g) = \max_{w \in W} \mathbb{E}_{x\sim p_r}[f_w(x)] - \mathbb{E}_{x \sim p_g} [f_w(x)].
 $$
 
 
-To maintain the K0Lipschitz continuity of function $$f_w$$ during training, the paper presents a simple but very practical trick: After every gradient update, clamp the weights $$w$$ to a small window, such as $$[-0.01, 0.01]$$. 
+To maintain the K-Lipschitz continuity of function $$f_w$$ during training, the paper presents a simple but very practical trick: After every gradient update, clamp the weights $$w$$ to a small window, such as $$[-0.01, 0.01]$$. 
 
 ### 3.6 Connections to Actor-Critic Methods [3]
 
@@ -160,6 +160,8 @@ reward/state does not depend on action.
 
 ## 4. Diffusion Models
 
+Several diffusion-based generative models have been proposed with similar ideas underneath, including *diffusion probabilistic models* (**DPM**; [Sohl-Dickstein et al., 2015](https://arxiv.org/abs/1503.03585)), *noise-conditioned score network* (**NCSN**; [Yang & Ermon, 2019](https://arxiv.org/abs/1907.05600)), and *denoising diffusion probabilistic models* (**DDPM**; [Ho et al. 2020](https://arxiv.org/abs/2006.11239)).
+
 ### 4.1 Forward Diffusion Process: From Data to Noise
 
 Given a data point sampled from a real data distribution $$x_0 \sim p_r(x)$$, a forward diffusion process, we can gradually add small amount of Gaussian noise in $$T$$ steps, producing a sequence os noisy samples $$x_1,\dots,x_T$$. The step sizes are controlled by a variance schedule $${\beta_t \in (0,1)}_{t=1}^T$$:
@@ -187,14 +189,19 @@ $$
 
 
 
-#### TODO: Connections with stochasitic gradient Langevin dynamics
+#### Connections with stochasitic gradient Langevin dynamics
+
+Langevin dynamics is a concept from physics, developed for statistically modeling molecular systems. Combined with stochastic gradient descent, *stochastic gradient Langevin dynamics* (**SGLD**; [Welling & Teh 2011](https://www.stats.ox.ac.uk/~teh/research/compstats/WelTeh2011a.pdf)) can produce samples from a probability density $$p(x)$$ using only the gradients $$\nabla_x \log p(x)$$ in a Markov chain of updates: 
+
 
 
 $$
-x_t = x_{t-1} + \delta/2 \nabla_x \log p(x_{t-1}) + \sqrt{\delta}\epsilon_t, \quad\text{where $\epsilon_{t-1} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$}.
+x_t = x_{t-1} + \Delta_t/2 \nabla_x \log p(x_{t-1}) + \sqrt{\Delta_t}\epsilon_t, \quad\text{where $\epsilon_{t} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$},
 $$
 
 
+
+where $$\Delta_t$$ is the step size. When $$T \to \infty, \epsilon \to 0$$, $x_T$ equals to the true probability $$p(x)$$. The Gaussian noise avoids collapses into local minima. 
 
 ### 4.2 Reverse Diffusion Process: From Noise to Data
 
@@ -237,8 +244,11 @@ The above derivations can be achieved by Bayesian rule, see this [blog](https://
 
 ### 4.3 Training and Sampling Process
 
-TODO: dervie DDPM loss:
+TODO: dervie VLB loss: 
 
+TODO: dervie NCSN loss: 
+
+TODO: dervie DDPM loss:
 
 $$
 \begin{aligned}
@@ -252,35 +262,51 @@ $$
 
 
 
-## 5. TODO: Flow-Matching Models
+## 5. Flow-Matching Models
 
-If we make the diffusion step $$\Delta t \to 0$$ and forward process from $$x_0 \to x_1$$ this becomes a continuous-time diffusion process.
+### 5.1 Mathematical Background
 
-#### Connections with stochasitic diffential equation (SDE)
+#### Forward Diffusion as Stochasitic Diffential Equation (SDE)
 
-The same as a stochasitc differential equation (SDE): 
-
+If we make the diffusion step $$\Delta t \to 0$$ and the forward diffusion process becomes a stochastic differential equation (SDE): 
 
 $$
 dx = f(x,t)dt + g(t)dw
 $$
 
+where:
 
-It has a corresponding ordinary differential equation (ODE) inducing the same $$p_t(x)$$:
+* $$w$$ represents a Wiener process (i.e., Brownian random motion);
+* $$f(\cdot, t)$$ is called the **drift;**
+* $$g(t)$$ is called the **diffusion** term.
 
+| Diffusion Methods | $$f(x, t)$$              | $$g(t)$$                          |
+| ----------------- | ------------------------ | --------------------------------- |
+| DDPM              | $$-\frac{1}{2}\beta_tx$$ | $$\sqrt{\beta_t}$$                |
+| NCSN              | $$0$$                    | $$\sqrt{\frac{d\sigma_t^2}{dt}}$$ |
 
+By carefully designing noise scheduling $$\beta_t$$ and $$\sigma_t$$ , DDPM and NCSN can generate the same probability path $$\{p_t(x)\}$$ and different SDEs are just different mathematical formulas to describe the same process, 
+
+#### Equivelance between SDE and Ordinary Differential Equation (ODE)
+
+[Song 2021](https://arxiv.org/pdf/2011.13456) has proved that *for any SDE, it has a corresponding ordinary differential equation (ODE) inducing the same $$p_t(x)$$*, which is called **probability flow ODE** with the following format: 
 $$
 \frac{dx}{dt} = f(x,t) - \frac{1}{2}g(t)^2 \nabla_x \log p_t(x)
 $$
 
+This connection transforms a random "walk" to a deterministic "flow" along the ODE trajectory, (1) easing the sampling process of the diffusion process ([DDIM, Song 2021](https://arxiv.org/abs/2010.02502)) and (2) inducing following simpler flow-matching methods. 
 
-Discretization this leads to “Denoising Diffusion Implicit Models” (DDIM) 
+### 5.2 Flow-Matching Methods
 
-Flow matching (FM)
+Probability flow ODE relies on a global score-based function $$\nabla_x \log p_t(x)$$ to generate samples, which is difficult to learn. While flow-matching methods directly design a simple path from real data $$x_0$$ to pure noise $$x_1$$. The simplest path is a constant-speed motion $$x_t=(1-t)x_0 + tx_1$$.  We need to learn a parametrized function $$v_{\theta}(x_t, t)$$ to match the real speed $x_1-x_0$. 
 
-This is the continuous version of Langevin dynamics function
+### 5.3 Training and Sampling Process
 
----
+<img src="https://raw.githubusercontent.com/mikezhang95/MyImages/main/img/202602021613294.png" alt="Screenshot 2026-02-02 at 16.13.04" style="zoom:80%;" />
+
+
+
+$$z$$ and $$x$$ can be the same space or $$z$$ be the latent space and flow-matching happens on that space. 
 
 ## References
 
@@ -294,7 +320,5 @@ This is the continuous version of Langevin dynamics function
 
 
 
-
-
-
+TODO: unify references and hyperlinks in the blog.
 
